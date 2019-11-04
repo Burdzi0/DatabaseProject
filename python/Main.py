@@ -1,6 +1,6 @@
 from datetime import date
 from sqlalchemy import create_engine
-from sqlalchemy import Table, Column, Integer, String, MetaData, Date, Time
+from sqlalchemy import Table, Column, Integer, String, MetaData, Date, Time, Float
 from faker import Faker
 from random import randrange
 
@@ -98,10 +98,47 @@ welcomepack = Table(
 ticket = Table(
     'ticket', meta,
     Column('ticket_id', Integer, primary_key=True),
-    Column('cost', float),
+    Column('cost', Float),
     Column('purchase_date', Date)
 )
 
+grade = Table(
+    'grade', meta,
+    Column('paper_id', Integer, primary_key=True),
+    Column('user_id', Integer, primary_key=True),
+    Column('grade', Float),
+    Column('reason', String)
+)
+
+reviewer = Table(
+    'reviewer', meta,
+    Column('user_id', Integer, primary_key=True),
+    Column('academic_title', String)
+)
+
+administrator = Table(
+    'administrator', meta,
+    Column('user_id', Integer, primary_key=True),
+    Column('duty', String)
+)
+
+supervision = Table(
+    'supervision', meta,
+    Column('user_id', Integer, primary_key=True),
+    Column('timetable_id', Integer, primary_key=True)
+)
+
+domain_reviewer = Table(
+    'domain_reviewer', meta,
+    Column('user_id', Integer, primary_key=True),
+    Column('domain_id', Integer, primary_key=True)
+)
+
+participation = Table(
+    'participation', meta,
+    Column('user_id', Integer, primary_key=True),
+    Column('lecture_id', Integer, primary_key=True)
+)
 
 conn = engine.connect()
 fake = Faker()
