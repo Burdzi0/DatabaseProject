@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData, Date, Time, Float
 from faker import Faker
 from random import randrange
+import random
 
 meta = MetaData()
 
@@ -177,11 +178,21 @@ def generate_users():
 
 
 def generate_events():
-    pass
+    for i in range(5):
+        insert_event = event.insert().values(event_name=fake.name(),
+                                            organizing_body=fake.company(),
+                                            address=fake.address(),
+                                            postal_code=fake.postalcode(),
+                                            town=fake.city())
+        conn.execute(insert_event)
 
 
 def generate_tickets():
-    pass
+    for i in range(1500):
+        insert_ticket = ticket.insert().values(
+            cost=(random.random() * 200),
+            purchase_date=date.today())
+        conn.execute(insert_ticket)
 
 
 def generate_welcomepacks():
