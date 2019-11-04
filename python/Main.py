@@ -1,6 +1,6 @@
 from datetime import date
 from sqlalchemy import create_engine
-from sqlalchemy import Table, Column, Integer, String, MetaData, Date
+from sqlalchemy import Table, Column, Integer, String, MetaData, Date, Time
 from faker import Faker
 from random import randrange
 
@@ -28,7 +28,6 @@ user = Table(
     Column('surname', String),
     Column('registration_date', Date)
 )
-
 
 event = Table(
     'event', meta,
@@ -77,8 +76,23 @@ paper = Table(
     Column('abstrakt', String)
 )
 
+domain = Table(
+    'domain', meta,
+    Column('domain_id', Integer, primary_key=True),
+    Column('domain_name', String)
+)
+
 conn = engine.connect()
 fake = Faker()
+
+
+def generate_domain():
+    for dom in range(20):
+        insert_domain = domain.insert().values(domain_name=fake.job())
+        conn.execute(insert_domain)
+
+
+generate_domain()
 
 
 def generate_universities():
@@ -95,6 +109,10 @@ def generate_universities():
 generate_universities()
 
 
+def random_university(university_ids):
+    return randrange(len(university_ids))
+
+
 def generate_users():
     # Select query
     query = 'SELECT university_id from university'
@@ -103,7 +121,7 @@ def generate_users():
     university_ids = conn.execute(query).fetchall()
 
     for i in range(2000):
-        insert_user = user.insert().values(university_id=university_ids[randrange(len(university_ids))][0],
+        insert_user = user.insert().values(university_id=university_ids[random_university(university_ids)][0],
                                            name=fake.first_name(),
                                            surname=fake.last_name(),
                                            email=fake.first_name() + fake.last_name() + '@' + fake.domain_name(),
@@ -112,4 +130,3 @@ def generate_users():
 
 
 generate_users()
-
