@@ -144,13 +144,10 @@ conn = engine.connect()
 fake = Faker()
 
 
-def generate_domain():
+def generate_domains():
     for dom in range(20):
         insert_domain = domain.insert().values(domain_name=fake.job())
         conn.execute(insert_domain)
-
-
-generate_domain()
 
 
 def generate_universities():
@@ -161,14 +158,6 @@ def generate_universities():
                                                        address=fake.address(),
                                                        country=fake.country())
         conn.execute(insert_university)
-
-
-# Create university
-generate_universities()
-
-
-def random_from_range(collection):
-    return randrange(len(collection))
 
 
 def generate_users():
@@ -187,4 +176,89 @@ def generate_users():
         conn.execute(insert_user)
 
 
+def generate_events():
+    pass
+
+
+def generate_tickets():
+    pass
+
+
+def generate_welcomepacks():
+    pass
+
+
+def generate_classrooms():
+    pass
+
+
+def generate_timetables():
+    pass
+
+
+def generate_papers():
+    pass
+
+
+def generate_administrators():
+    pass
+
+
+def generate_reviewers():
+    pass
+
+
+def generate_participants():
+    pass
+
+
+def generate_suprevisions():
+    pass
+
+
+def generate_grades():
+    pass
+
+
+def generate_domain_reviewers():
+    pass
+
+
+def generate_lectures():
+    pass
+
+
+def generate_participations():
+    pass
+
+
+def random_from_range(collection):
+    return randrange(len(collection))
+
+
+# No foreign keys needed #
+generate_universities()
+generate_events()
+generate_tickets()
+generate_welcomepacks()
+generate_classrooms()
+generate_domains()
+
+# User and timetable #
 generate_users()
+generate_timetables()
+
+# Paper, administrator, reviewer, participant #
+generate_papers()
+generate_administrators()
+generate_reviewers()
+generate_participants()
+
+# supervision, grade, domain_reviewer, lecture #
+generate_suprevisions()
+generate_grades()
+generate_domain_reviewers()
+generate_lectures()
+
+# participation #
+generate_participations()
