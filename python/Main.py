@@ -82,6 +82,27 @@ domain = Table(
     Column('domain_name', String)
 )
 
+participant = Table(
+    'participant', meta,
+    Column('welcomepack_id', Integer),
+    Column('ticket_id', Integer),
+    Column('user_id', Integer, primary_key=True)
+)
+
+welcomepack = Table(
+    'welcomepack', meta,
+    Column('welcomepack_id', Integer, primary_key=True),
+    Column('shirt_size', String)
+)
+
+ticket = Table(
+    'ticket', meta,
+    Column('ticket_id', Integer, primary_key=True),
+    Column('cost', float),
+    Column('purchase_date', Date)
+)
+
+
 conn = engine.connect()
 fake = Faker()
 
