@@ -185,7 +185,15 @@ def generate_tickets():
 
 
 def generate_welcomepacks():
-    pass
+    query = 'SELECT COUNT(*) from user'
+
+    number_of_welcome_packs = conn.execute(query).fetchone()
+
+    shirt_size = ['XS', 'S', 'M', 'L', 'XL', 'XXL']
+
+    for number in range(number_of_welcome_packs[0]):
+        insert_welcomepack = welcomepack.insert().values(shirt_size=shirt_size[random_from_range(shirt_size)])
+        conn.execute(insert_welcomepack)
 
 
 def generate_classrooms():
@@ -201,7 +209,15 @@ def generate_papers():
 
 
 def generate_administrators():
-    pass
+    query = 'SELECT user_id from user'
+
+    # Select all universities
+    user_ids = conn.execute(query).fetchall()
+
+    for adm in range(50):
+        insert_administrator = administrator.insert().values(user_id=user_ids[random_from_range(user_ids)],
+                                                             duty=fake.job())
+        conn.execute(insert_administrator)
 
 
 def generate_reviewers():
