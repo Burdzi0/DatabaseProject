@@ -109,8 +109,8 @@ def generate_universities():
 generate_universities()
 
 
-def random_university(university_ids):
-    return randrange(len(university_ids))
+def random_from_range(collection):
+    return randrange(len(collection))
 
 
 def generate_users():
@@ -121,7 +121,7 @@ def generate_users():
     university_ids = conn.execute(query).fetchall()
 
     for i in range(2000):
-        insert_user = user.insert().values(university_id=university_ids[random_university(university_ids)][0],
+        insert_user = user.insert().values(university_id=university_ids[random_from_range(university_ids)][0],
                                            name=fake.first_name(),
                                            surname=fake.last_name(),
                                            email=fake.first_name() + fake.last_name() + '@' + fake.domain_name(),
