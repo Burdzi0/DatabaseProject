@@ -2,8 +2,8 @@ from datetime import date
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData, Date, Time, Float
 from faker import Faker
-from random import randrange
 import random
+from random import randrange, randint
 
 meta = MetaData()
 
@@ -180,10 +180,10 @@ def generate_users():
 def generate_events():
     for i in range(5):
         insert_event = event.insert().values(event_name=fake.name(),
-                                            organizing_body=fake.company(),
-                                            address=fake.address(),
-                                            postal_code=fake.postalcode(),
-                                            town=fake.city())
+                                             organizing_body=fake.company(),
+                                             address=fake.address(),
+                                             postal_code=fake.postalcode(),
+                                             town=fake.city())
         conn.execute(insert_event)
 
 
@@ -208,11 +208,24 @@ def generate_welcomepacks():
 
 
 def generate_classrooms():
-    pass
+    for clas in range(30):
+        insert_class = classroom.insert().values(classroom_number=randint(1, 700),
+                                                 postal_code=fake.postalcode(),
+                                                 town=fake.city(), address=fake.address())
+        conn.execute(insert_class)
 
 
 def generate_timetables():
-    pass
+    # Select query
+    query = 'SELECT event_id from event'
+
+    # Select all universities
+    event_ids = conn.execute(query).fetchall()
+    for tt in range(6):
+        insert_timetable = timetable.insert().values(event_id=event_ids[random_from_range(event_ids)][0],
+                                                     timetable_name=fake.postalcode(),
+                                                     date=fake.date_between(start_date="today", end_date=None))
+        conn.execute(insert_timetable)
 
 
 def generate_papers():
@@ -232,7 +245,15 @@ def generate_administrators():
 
 
 def generate_reviewers():
-    pass
+    # Select query
+    query = 'SELECT user_id from reviewers'
+
+    # Select all universities
+    user_ids = conn.execute(query).fetchall()
+    for r in range(50):
+        insert_reviewers = timetable.insert().values(user_id=user_ids[random_from_range(user_ids)][0],
+                                                     academic_title=fake.job)
+        conn.execute(insert_reviewers)
 
 
 def generate_participants():
