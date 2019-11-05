@@ -224,7 +224,7 @@ def generate_timetables():
     for tt in range(6):
         insert_timetable = timetable.insert().values(event_id=event_ids[random_from_range(event_ids)][0],
                                                      timetable_name=fake.postalcode(),
-                                                     date=fake.date_between(start_date="today", end_date=None))
+                                                     date=fake.date_between(start_date="today", end_date='+30d'))
         conn.execute(insert_timetable)
 
 
@@ -298,7 +298,13 @@ def generate_suprevisions():
 
 
 def generate_grades():
-    pass
+    query = 'SELECT p.paper_id, dr.user_id FROM domain_reviewer dr JOIN paper p on p.domain_id = dr.domain_id'
+    paper_user_ids = conn.execute(query).fetchall()
+    for i in range(200):
+        paper_user = paper_user_ids[random_from_range(paper_user_ids)]
+        insert_grade = grade.insert().values(paper_id=paper_user["paper_id"],
+                                             user_id=paper_user["user_id"])
+        conn.execute(insert_grade)
 
 
 def generate_domain_reviewers():
@@ -362,10 +368,10 @@ generate_users()
 generate_timetables()
 
 # Paper, administrator, reviewer, participant #
+generate_participants()
 generate_papers()
 generate_administrators()
 generate_reviewers()
-generate_participants()
 
 # supervision, grade, domain_reviewer, lecture #
 generate_suprevisions()

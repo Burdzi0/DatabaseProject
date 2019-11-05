@@ -107,7 +107,7 @@ CREATE TABLE "participation" (
 
 CREATE TABLE "classroom" (
     "classroom_id" serial NOT NULL,
-    "classroom_number" integer NOT NULL UNIQUE CONSTRAINT classroom_number_over_zero CHECK (classroom_number > 0),
+    "classroom_number" integer NOT NULL CONSTRAINT classroom_number_over_zero CHECK (classroom_number > 0),
     "postal_code" VARCHAR(10) NOT NULL,
     "town" VARCHAR(100) NOT NULL,
     "address" VARCHAR(100) NOT NULL,
