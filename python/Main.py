@@ -246,7 +246,6 @@ def generate_papers():
 def generate_administrators():
     query = 'SELECT user_id from user'
 
-    # Select all universities
     user_ids = conn.execute(query).fetchall()
 
     for adm in range(50):
@@ -335,7 +334,15 @@ def generate_lectures():
 
 
 def generate_participations():
-    pass
+    query1 = 'SELECT user_id from participant'
+    participant_ids = conn.execute(query1).fetchall()
+
+    query2 = 'SELECT lecture_id FROM lecture'
+    lecture_ids = conn.execute(query2).fetchall()
+
+    insert_participants = participation.insert().values(user_id=participant_ids[random_from_range(participant_ids)],
+                                                        lecture_id=lecture_ids[random_from_range(lecture_ids)])
+    conn.execute(insert_participants)
 
 
 def random_from_range(collection):
