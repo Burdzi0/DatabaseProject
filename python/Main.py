@@ -288,7 +288,15 @@ def generate_grades():
 
 
 def generate_domain_reviewers():
-    pass
+    query1 = 'SELECT domain_id from domain'
+    query2 = 'SELECT user_id from reviewer'
+
+    domain_ids = conn.execute(query1).fetchall()
+    user_ids = conn.execute(query2).fetchall()
+    for i in range(230):
+        insert_domain_reviewers = supervision.insert().values(user_id=user_ids[random_from_range(user_ids)],
+                                                              domain_id=domain_ids[random_from_range(domain_ids)])
+        conn.execute(insert_domain_reviewers)
 
 
 def generate_lectures():
