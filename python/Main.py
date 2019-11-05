@@ -277,7 +277,7 @@ def generate_suprevisions():
 
     user_ids = conn.execute(query2).fetchall()
     timetable_ids = conn.execute(query1).fetchall()
-    for i in range(time_table_count):
+    for i in range(len(timetable_ids)):
         insert_supervision = supervision.insert().values(user_id=user_ids[random_from_range(user_ids)],
                                                          timetable_id=timetable_ids[random_from_range(timetable_ids)])
         conn.execute(insert_supervision)
