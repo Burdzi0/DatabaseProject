@@ -3,7 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData, Date, Time, Float
 from faker import Faker
 import random
-from random import randrange, randint
+from random import randrange, randint, shuffle, seed
+from faker.providers.job import Provider
 
 meta = MetaData()
 
@@ -146,8 +147,12 @@ fake = Faker()
 
 
 def generate_domains():
+    domains = list(set(Provider.job))
+    seed(2020)
+    shuffle(domains)
+
     for dom in range(20):
-        insert_domain = domain.insert().values(domain_name=fake.job())
+        insert_domain = domain.insert().values(domain_name=domains[dom])
         conn.execute(insert_domain)
 
 
@@ -172,7 +177,7 @@ def generate_users():
         insert_user = user.insert().values(university_id=university_ids[random_from_range(university_ids)][0],
                                            name=fake.first_name(),
                                            surname=fake.last_name(),
-                                           email=fake.first_name() + fake.last_name() + '@' + fake.domain_name(),
+                                           email=fake.first_name() + fake.last_name() + '@' + fake.domain_name() + random.randrange(0, 200),
                                            registration_date=date.today())
         conn.execute(insert_user)
 
@@ -269,18 +274,21 @@ def generate_reviewers():
 def generate_participants():
     welcomepack_query = 'SELECT welcomepack_id from welcomepack'
     welcomepack_ids = conn.execute(welcomepack_query).fetchall()
+    shuffle(welcomepack_ids)
 
     ticket_query = 'SELECT ticket_id from ticket'
     ticket_ids = conn.execute(ticket_query).fetchall()
+    shuffle(ticket_ids)
 
     user_query = 'SELECT user_id from user'
     user_ids = conn.execute(user_query).fetchall()
+    shuffle(user_ids)
 
     for part in range(1500):
         insert_participant = participant.insert().values(
-            welcomepack_id=welcomepack_ids[random_from_range(welcomepack_ids)],
-            ticket_id=ticket_ids[random_from_range(ticket_ids)],
-            user_id=user_ids[random_from_range(user_ids)])
+            welcomepack_id=welcomepack_ids[part],
+            ticket_id=ticket_ids[part],
+            user_id=user_ids[part])
 
         conn.execute(insert_participant)
 
