@@ -315,7 +315,23 @@ def generate_domain_reviewers():
 
 
 def generate_lectures():
-    pass
+    query1 = 'SELECT classroom_id from classroom'
+    query2 = 'SELECT user_id from participant'
+    query3 = 'SELECT timetable_id from timetable'
+    query4 = 'SELECT paper_id from paper'
+    classroom_ids = conn.execute(query1).fetchall()
+    user_ids = conn.execute(query2).fetchall()
+    timetable_ids = conn.execute(query3).fetchall()
+    paper_ids = conn.execute(query4).fetchall()
+
+    for i in range(250):
+        insert_lecture = lecture.insert().values(user_id=user_ids[random_from_range(user_ids)],
+                                                 classroom_id=classroom_ids[random_from_range(classroom_ids)],
+                                                 timetable_id=timetable_ids[random_from_range(timetable_ids)],
+                                                 paper_id=paper_ids[random_from_range(paper_ids)],
+                                                 start_time=fake.time(),
+                                                 duration=random.randrange(45, 90))
+        conn.execute(insert_lecture)
 
 
 def generate_participations():
