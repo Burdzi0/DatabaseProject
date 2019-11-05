@@ -229,7 +229,18 @@ def generate_timetables():
 
 
 def generate_papers():
-    pass
+    query_participant = 'SELECT user_id from participant'
+    user_ids = conn.execute(query_participant).fetchall()
+
+    query_domain = 'SELECT domain_id from domain'
+    domain_ids = conn.execute(query_domain).fetchall()
+
+    for i in range(200):
+        insert_paper = paper.insert().values(user_id=user_ids[random_from_range(user_ids)][0],
+                                             domain_id=domain_ids[random_from_range(domain_ids)][0],
+                                             topic=fake.word(ext_word_list=None),
+                                             abstrakt=fake.fake.paragraphs(nb=3, ext_word_list=None))
+        conn.execute(insert_paper)
 
 
 def generate_administrators():
