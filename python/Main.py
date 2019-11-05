@@ -268,7 +268,22 @@ def generate_reviewers():
 
 
 def generate_participants():
-    pass
+    welcomepack_query = 'SELECT welcomepack_id from welcomepack'
+    welcomepack_ids = conn.execute(welcomepack_query).fetchall()
+
+    ticket_query = 'SELECT ticket_id from ticket'
+    ticket_ids = conn.execute(ticket_query).fetchall()
+
+    user_query = 'SELECT user_id from user'
+    user_ids = conn.execute(user_query).fetchall()
+
+    for part in range(1500):
+        insert_participant = participant.insert().values(
+            welcomepack_id=welcomepack_ids[random_from_range(welcomepack_ids)],
+            ticket_id=ticket_ids[random_from_range(ticket_ids)],
+            user_id=user_ids[random_from_range(user_ids)])
+
+        conn.execute(insert_participant)
 
 
 def generate_suprevisions():
