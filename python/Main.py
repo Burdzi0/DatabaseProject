@@ -3,7 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, Integer, String, MetaData, Date, Time, Float
 from faker import Faker
 import random
-from random import randrange, randint
+from random import randrange, randint, shuffle, seed
+from faker.providers.job import Provider
 
 meta = MetaData()
 
@@ -146,8 +147,12 @@ fake = Faker()
 
 
 def generate_domains():
+    domains = list(set(Provider.job))
+    seed(2020)
+    shuffle(domains)
+
     for dom in range(20):
-        insert_domain = domain.insert().values(domain_name=fake.job())
+        insert_domain = domain.insert().values(domain_name=domains[dom])
         conn.execute(insert_domain)
 
 
