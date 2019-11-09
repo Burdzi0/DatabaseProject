@@ -147,7 +147,7 @@ fake = Faker()
 
 
 def generate_domains():
-    domains = list(set(Provider.job))
+    domains = list(set(Provider.jobs))
     seed(2020)
     shuffle(domains)
 
@@ -177,7 +177,7 @@ def generate_users():
         insert_user = user.insert().values(university_id=university_ids[random_from_range(university_ids)][0],
                                            name=fake.first_name(),
                                            surname=fake.last_name(),
-                                           email=fake.first_name() + fake.last_name() + '@' + fake.domain_name() + random.randrange(0, 200),
+                                           email=fake.first_name() + fake.last_name() + '@' + fake.domain_name() + str(random.randrange(0, 200)),
                                            registration_date=date.today())
         conn.execute(insert_user)
 
