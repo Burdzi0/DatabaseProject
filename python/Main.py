@@ -191,8 +191,8 @@ def create_users_query(*args):
     insert_user = user.insert().values(university_id=university_ids[random_from_range(university_ids)][0],
                                        name=fake.first_name(),
                                        surname=fake.last_name(),
-                                       email=fake.first_name() + fake.last_name() + '@' + fake.domain_name() + str(
-                                           random.randrange(0, 200)),
+                                       email=fake.first_name() + fake.last_name() + str(random.randrange(0, 200))
+                                                                                        + '@' + fake.domain_name(),
                                        registration_date=date.today())
     return insert_user
 
@@ -377,7 +377,9 @@ def generate_grades():
 def create_grade_query(paper_user_ids):
     paper_user = paper_user_ids[random_from_range(paper_user_ids)]
     insert_grade = grade.insert().values(paper_id=paper_user["paper_id"],
-                                         user_id=paper_user["user_id"])
+                                         user_id=paper_user["user_id"],
+                                         grade=round(random.uniform(1.0, 10.0), 2),
+                                         reason=fake.sentences(nb=3, ext_word_list=None))
     return insert_grade
 
 
@@ -393,7 +395,7 @@ def generate_domain_reviewers():
 
 
 def create_domain_reviewers_query(domain_ids, user_ids):
-    insert_domain_reviewers = supervision.insert().values(user_id=user_ids[random_from_range(user_ids)][0],
+    insert_domain_reviewers = domain_reviewer.insert().values(user_id=user_ids[random_from_range(user_ids)][0],
                                                           domain_id=domain_ids[random_from_range(domain_ids)][0])
     return insert_domain_reviewers
 
@@ -403,6 +405,7 @@ def generate_lectures():
     query2 = 'SELECT user_id from participant'
     query3 = 'SELECT timetable_id from timetable'
     query4 = 'SELECT paper_id from paper'
+
     classroom_ids = conn.execute(query1).fetchall()
     user_ids = conn.execute(query2).fetchall()
     timetable_ids = conn.execute(query3).fetchall()
@@ -414,10 +417,10 @@ def generate_lectures():
 
 
 def create_lecture_query(classroom_ids, paper_ids, timetable_ids, user_ids):
-    insert_lecture = lecture.insert().values(user_id=user_ids[random_from_range(user_ids)],
-                                             classroom_id=classroom_ids[random_from_range(classroom_ids)],
-                                             timetable_id=timetable_ids[random_from_range(timetable_ids)],
-                                             paper_id=paper_ids[random_from_range(paper_ids)],
+    insert_lecture = lecture.insert().values(user_id=user_ids[random_from_range(user_ids)][0],
+                                             classroom_id=classroom_ids[random_from_range(classroom_ids)][0],
+                                             timetable_id=timetable_ids[random_from_range(timetable_ids)][0],
+                                             paper_id=paper_ids[random_from_range(paper_ids)][0],
                                              start_time=fake.time(),
                                              duration=random.randrange(45, 90))
     return insert_lecture
@@ -436,8 +439,8 @@ def generate_participations():
 
 
 def create_participants_query(lecture_ids, participant_ids):
-    insert_participants = participation.insert().values(user_id=participant_ids[random_from_range(participant_ids)],
-                                                        lecture_id=lecture_ids[random_from_range(lecture_ids)])
+    insert_participants = participation.insert().values(user_id=participant_ids[random_from_range(participant_ids)][0],
+                                                        lecture_id=lecture_ids[random_from_range(lecture_ids)][0])
     return insert_participants
 
 
@@ -468,27 +471,27 @@ def try_insert_without_parameters(create_query):
 
 
 # No foreign keys needed #
-# generate_universities()
-# generate_events()
-# generate_tickets()
-# generate_welcomepacks()
-# generate_classrooms()
-# generate_domains()
-
+generate_universities()
+generate_events()
+generate_tickets()
+generate_welcomepacks()
+generate_classrooms()
+generate_domains()
+#
 # User and timetable #
-# generate_users()
-# generate_timetables()
+generate_users()
+generate_timetables()
 
 # Paper, administrator, reviewer, participant #
-# generate_participants()
-# generate_papers()
-# generate_administrators()
-# generate_reviewers()
+generate_participants()
+generate_papers()
+generate_administrators()
+generate_reviewers()
 
 # supervision, grade, domain_reviewer, lecture #
-# generate_suprevisions()
-generate_grades()
+generate_suprevisions()
 generate_domain_reviewers()
+generate_grades()
 generate_lectures()
 
 # participation #
