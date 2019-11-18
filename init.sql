@@ -91,7 +91,7 @@ CREATE TABLE "lecture" (
     "timetable_id" integer,
     "paper_id" integer NOT NULL,
     "start_time" TIME NOT NULL,
-    "duration" TIMESTAMP NOT NULL,
+    "duration" integer NOT NULL,
     CONSTRAINT "lecture_pk" PRIMARY KEY ("lecture_id")
 );
 
