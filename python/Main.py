@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 
 meta = MetaData()
 
-engine = create_engine('postgres://docker:docker@localhost/docker', echo=True)
+engine = create_engine('postgres://docker:docker@localhost/docker', echo=False)
 meta.create_all(engine)
 
 university = Table(
@@ -154,12 +154,14 @@ def generate_domains():
         print_status("domain", dom)
         insert_domain = domain.insert().values(domain_name=domains[dom][:50])
         conn.execute(insert_domain)
+    print("")
 
 
 def generate_universities():
     for uni in range(40):
         print_status("university", uni)
         try_insert_without_parameters(create_university_query)
+    print("")
 
 
 def print_status(name, number):
@@ -184,6 +186,7 @@ def generate_users():
     for i in range(3000):
         print_status("user", i)
         try_insert(create_users_query, university_ids)
+    print("")
 
 
 def create_users_query(*args):
@@ -201,6 +204,7 @@ def generate_events():
     for i in range(5):
         print_status("event", i)
         try_insert_without_parameters(create_events_query)
+    print("")
 
 
 def create_events_query():
@@ -216,6 +220,7 @@ def generate_tickets():
     for i in range(1500):
         print_status("ticket", i)
         try_insert_without_parameters(create_ticket_query)
+    print("")
 
 
 def create_ticket_query():
@@ -233,8 +238,7 @@ def generate_welcomepacks():
     for number in range(number_of_welcome_packs):
         print_status("welcomepack", number)
         try_insert(create_welcomepack_query, shirt_size)
-
-    print(conn.execute('SELECT COUNT(*) from welcomepack').fetchone())
+    print("")
 
 
 def create_welcomepack_query(shirt_size):
@@ -246,6 +250,7 @@ def generate_classrooms():
     for clas in range(30):
         print_status("classroom", clas)
         try_insert_without_parameters(create_classroom_query)
+    print("")
 
 
 def create_classroom_query():
@@ -264,6 +269,7 @@ def generate_timetables():
     for tt in range(6):
         print_status("timetable", tt)
         try_insert(create_timetable_query, event_ids)
+    print("")
 
 
 def create_timetable_query(event_ids):
@@ -283,6 +289,7 @@ def generate_papers():
     for i in range(200):
         print_status("paper", i)
         try_insert(create_paper_query, domain_ids, user_ids)
+    print("")
 
 
 def create_paper_query(domain_ids, user_ids):
@@ -301,6 +308,7 @@ def generate_administrators():
     for adm in range(50):
         print_status("administrator", adm)
         try_insert(create_administrators_query, user_ids)
+    print("")
 
 
 def create_administrators_query(user_ids):
@@ -317,6 +325,7 @@ def generate_reviewers():
     for r in range(50):
         print_status("reviewer", r)
         try_insert(create_reviewers_query, user_ids)
+    print("")
 
 
 def create_reviewers_query(user_ids):
@@ -338,6 +347,7 @@ def generate_participants():
     for part in range(1500):
         print_status("participant", part)
         try_insert(create_participant_query, ticket_ids, user_ids, welcomepack_ids)
+    print("")
 
 
 def create_participant_query(ticket_ids, user_ids, welcomepack_ids):
@@ -358,6 +368,7 @@ def generate_suprevisions():
     for i in range(len(timetable_ids)):
         print_status("supervision", i)
         try_insert(create_supervision_query, timetable_ids, user_ids)
+    print("")
 
 
 def create_supervision_query(timetable_ids, user_ids):
@@ -372,6 +383,7 @@ def generate_grades():
     for i in range(200):
         print_status("grade", i)
         try_insert(create_grade_query, paper_user_ids)
+    print("")
 
 
 def create_grade_query(paper_user_ids):
@@ -392,6 +404,7 @@ def generate_domain_reviewers():
     for i in range(230):
         print_status("domain_reviewer", i)
         try_insert(create_domain_reviewers_query, domain_ids, user_ids)
+    print("")
 
 
 def create_domain_reviewers_query(domain_ids, user_ids):
@@ -414,6 +427,7 @@ def generate_lectures():
     for i in range(250):
         print_status("lecture", i)
         try_insert(create_lecture_query, classroom_ids, paper_ids, timetable_ids, user_ids)
+    print("")
 
 
 def create_lecture_query(classroom_ids, paper_ids, timetable_ids, user_ids):
@@ -436,6 +450,7 @@ def generate_participations():
     for i in range(len(participant_ids)):
         print_status("participations", i)
         try_insert(create_participants_query, lecture_ids, participant_ids)
+    print("")
 
 
 def create_participants_query(lecture_ids, participant_ids):
